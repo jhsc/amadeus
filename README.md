@@ -12,14 +12,38 @@ go get github.com/jhsc/amadeus
 
 ## Usage
 
-TODO
+Display help menu
+
+```sh
+amadeus help
+Usage:
+	amadeus start                      - start the server
+	amadeus init                       - create an initial configuration file
+	amadeus gen-key                    - generate a random 32-byte hex-encoded key
+	amadeus help                       - show this message
+Use -e flag to read configuration from environment variables instead of a file. E.g.:
+	amadeus -e start
+```
+
+Generate Token
+
+```sh
+amadeus gen-key
+2020/06/17 20:02:45 key: a0e95ec1c52387aa35fa885c50345755accfeccfb8e37f3bd5994d7d4198fc1e
+```
+
+Start server
+
+```sh
+amadeus start
+```
 
 ## Development
 
 ### Requirements
 
 - Install [Go](https://golang.org)
-- Install [Go Modules](https://blog.golang.org/using-go-modules)
+- Go Modules [Go Modules](https://blog.golang.org/using-go-modules)
 
 ### Makefile
 
