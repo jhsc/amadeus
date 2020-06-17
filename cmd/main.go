@@ -58,7 +58,7 @@ func initConfig() {
 }
 
 func genKey() {
-	logger.Println("gen keys srv")
+	logger.Printf("key: %s", config.GenKeyHex(32))
 }
 
 func help() {
