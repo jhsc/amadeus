@@ -5,9 +5,14 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
+	"net/url"
 	"os"
 
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 	"gitlab.com/jhsc/amadeus/config"
+	"gitlab.com/jhsc/amadeus/docker"
 )
 
 var (
@@ -37,6 +42,33 @@ func main() {
 
 func startServer() {
 	logger.Println("start server srv")
+	cfg, err := config.GetConfig(*useEnvConfig)
+	if err != nil {
+		logger.Fatalf("failed to load configuration: %s", err)
+	}
+	baseURL, err := url.Parse(cfg.BaseURL)
+	if err != nil {
+		logger.Fatalf("failed to parse base url: %s", err)
+	}
+
+	//
+	endpoint := "unix:///var/run/docker.sock"
+	ds, err := docker.NewService(endpoint)
+	if err != nil {
+		logger.Fatalf("failed to create new docker service: %s", err)
+	}
+
+	logger.Printf("Docker servicer %+v", ds)
+
+	// Add API handler
+
+	router := chi.NewRouter()
+	router.Use(middleware.RequestLogger(&middleware.DefaultLogFormatter{Logger: logger}))
+	router.Use(middleware.Recoverer)
+
+	if err := http.ListenAndServe(cfg.Address, http.StripPrefix(baseURL.Path, router)); err != nil {
+		logger.Fatalf("listen and serve failed: %v", err)
+	}
 }
 
 func initConfig() {

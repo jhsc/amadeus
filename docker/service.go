@@ -15,33 +15,33 @@ import (
 // Service ...
 type Service struct {
 	Client *docker.Client
-	DeployerPayload
+	// DeployerPayload
 }
 
 // NewService ...
-func NewService(endpoint string, payload DeployerPayload) (*Service, error) {
+func NewService(endpoint string) (*Service, error) {
 	client, err := docker.NewClient(endpoint)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Service{
-		Client:          client,
-		DeployerPayload: payload,
+		Client: client,
+		// DeployerPayload: payload,
 	}, nil
 }
 
 // DeployCompose ...
-func (ds *Service) DeployCompose() error {
+func (ds *Service) DeployCompose(payload DeployerPayload) error {
 	// TODO: integrate db
-	ds.DeployerPayload.ID = strconv.FormatInt(time.Now().UnixNano(), 10)
+	payload.ID = strconv.FormatInt(time.Now().UnixNano(), 10)
 
 	// save compose
-	path, err := ds.DeployerPayload.SaveComposeFile()
+	path, err := payload.SaveComposeFile()
 	if err != nil {
 		return err
 	}
-	fmt.Printf("Data: %+v\n", ds.DeployerPayload)
+	fmt.Printf("Data: %+v\n", payload)
 
 	// TODO : DOCKER LOGIN TO PRIVATE DOCKER HUB
 	// err = ds.PullImage("docker", "1.12.0")
@@ -87,7 +87,7 @@ func (ds *Service) DeployCompose() error {
 		docker.Config{
 			Image:      "docker/compose:1.8.0",
 			Cmd:        []string{"up", "-d"},
-			Env:        ds.DeployerPayload.CreateEnvs(),
+			Env:        payload.CreateEnvs(),
 			WorkingDir: path,
 		},
 		docker.HostConfig{
