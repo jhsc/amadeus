@@ -33,7 +33,7 @@ func New(config *Config, token string) *Handler {
 	h.router = chi.NewRouter()
 	h.router.Use(h.restrictAccess)
 
-	h.router.Get("/healthz", h.handleHealthz)
+	// h.router.Get("/healthz", h.handleHealthz)
 
 	// TODO: create deployment handle
 	// h.router.Post("/deploy", h.handleNewDeployment)

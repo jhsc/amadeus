@@ -69,6 +69,7 @@ func startServer() {
 	router.Use(middleware.RequestLogger(&middleware.DefaultLogFormatter{Logger: logger}))
 	router.Use(middleware.Recoverer)
 
+	router.Get("/healthz", apiHandler.HandleHealthz)
 	router.Mount("/api/v1", apiHandler)
 
 	if err := http.ListenAndServe(cfg.Address, http.StripPrefix(baseURL.Path, router)); err != nil {
