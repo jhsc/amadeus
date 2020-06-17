@@ -11,6 +11,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"gitlab.com/jhsc/amadeus/api"
 	"gitlab.com/jhsc/amadeus/config"
 	"gitlab.com/jhsc/amadeus/docker"
 )
@@ -58,13 +59,17 @@ func startServer() {
 		logger.Fatalf("failed to create new docker service: %s", err)
 	}
 
-	logger.Printf("Docker servicer %+v", ds)
-
-	// Add API handler
+	apiHandler := api.New(&api.Config{
+		DockerService: ds,
+	},
+		cfg.Token,
+	)
 
 	router := chi.NewRouter()
 	router.Use(middleware.RequestLogger(&middleware.DefaultLogFormatter{Logger: logger}))
 	router.Use(middleware.Recoverer)
+
+	router.Mount("/api/v1", apiHandler)
 
 	if err := http.ListenAndServe(cfg.Address, http.StripPrefix(baseURL.Path, router)); err != nil {
 		logger.Fatalf("listen and serve failed: %v", err)
