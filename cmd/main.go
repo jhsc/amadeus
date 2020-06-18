@@ -14,6 +14,7 @@ import (
 	"gitlab.com/jhsc/amadeus/api"
 	"gitlab.com/jhsc/amadeus/config"
 	"gitlab.com/jhsc/amadeus/docker"
+	"gitlab.com/jhsc/amadeus/store/mysql"
 )
 
 var (
@@ -59,8 +60,15 @@ func startServer() {
 		logger.Fatalf("failed to create new docker service: %s", err)
 	}
 
+	store, err := mysql.Connect()
+	if err != nil {
+		logger.Fatalf("failed to create new docker service: %s", err)
+	}
+
 	apiHandler := api.New(&api.Config{
+		Logger:        logger,
 		DockerService: ds,
+		Store:         store,
 	},
 		cfg.Token,
 	)

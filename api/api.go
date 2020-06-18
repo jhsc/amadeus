@@ -11,12 +11,14 @@ import (
 
 	"github.com/go-chi/chi"
 	"gitlab.com/jhsc/amadeus/docker"
+	"gitlab.com/jhsc/amadeus/store"
 )
 
 // Config is an API handler configuration.
 type Config struct {
 	Logger        *log.Logger
 	DockerService *docker.Service
+	Store         store.Store
 }
 
 // Handler handles API requests.
