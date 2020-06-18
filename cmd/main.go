@@ -14,7 +14,7 @@ import (
 	"gitlab.com/jhsc/amadeus/api"
 	"gitlab.com/jhsc/amadeus/config"
 	"gitlab.com/jhsc/amadeus/docker"
-	"gitlab.com/jhsc/amadeus/store/mysql"
+	"gitlab.com/jhsc/amadeus/store/sqlite"
 )
 
 var (
@@ -60,7 +60,7 @@ func startServer() {
 		logger.Fatalf("failed to create new docker service: %s", err)
 	}
 
-	store, err := mysql.Connect()
+	store, err := sqlite.Connect()
 	if err != nil {
 		logger.Fatalf("failed to create new docker service: %s", err)
 	}

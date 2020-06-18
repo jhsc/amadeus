@@ -1,5 +1,5 @@
-// Package mysql provides a MySQL implementation of the amadeus data store interface.
-package mysql
+// Package sqlite provides a sqlite implementation of the amadeus data store interface.
+package sqlite
 
 import (
 	"bytes"
