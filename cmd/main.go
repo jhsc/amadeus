@@ -53,14 +53,13 @@ func startServer() {
 		logger.Fatalf("failed to parse base url: %s", err)
 	}
 
-	//
-	endpoint := "unix:///var/run/docker.sock"
-	ds, err := docker.NewService(endpoint)
+	store, err := sqlite.Connect()
 	if err != nil {
 		logger.Fatalf("failed to create new docker service: %s", err)
 	}
 
-	store, err := sqlite.Connect()
+	endpoint := "unix:///var/run/docker.sock"
+	ds, err := docker.NewService(endpoint, store)
 	if err != nil {
 		logger.Fatalf("failed to create new docker service: %s", err)
 	}

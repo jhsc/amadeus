@@ -7,19 +7,19 @@ import (
 	"log"
 	"os"
 	"strconv"
-	"time"
 
 	docker "github.com/fsouza/go-dockerclient"
+	"gitlab.com/jhsc/amadeus/store"
 )
 
 // Service ...
 type Service struct {
 	Client *docker.Client
-	// DeployerPayload
+	Store  store.Store
 }
 
 // NewService ...
-func NewService(endpoint string) (*Service, error) {
+func NewService(endpoint string, store store.Store) (*Service, error) {
 	client, err := docker.NewClient(endpoint)
 	if err != nil {
 		return nil, err
@@ -27,14 +27,14 @@ func NewService(endpoint string) (*Service, error) {
 
 	return &Service{
 		Client: client,
-		// DeployerPayload: payload,
+		Store:  store,
 	}, nil
 }
 
 // DeployCompose ...
 func (ds *Service) DeployCompose(payload DeployerPayload) error {
-	// TODO: integrate db
-	payload.ID = strconv.FormatInt(time.Now().UnixNano(), 10)
+	id, err := ds.Store.Projects().New(payload.Project)
+	payload.ID = strconv.FormatInt(id, 10)
 
 	// save compose
 	path, err := payload.SaveComposeFile()
