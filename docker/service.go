@@ -34,6 +34,9 @@ func NewService(endpoint string, store store.Store) (*Service, error) {
 // DeployCompose ...
 func (ds *Service) DeployCompose(payload DeployerPayload) error {
 	id, err := ds.Store.Projects().New(payload.Project)
+	if err != nil {
+		return err
+	}
 	payload.ID = strconv.FormatInt(id, 10)
 
 	// save compose
@@ -42,6 +45,7 @@ func (ds *Service) DeployCompose(payload DeployerPayload) error {
 		return err
 	}
 	fmt.Printf("Data: %+v\n", payload)
+	fmt.Printf("Path ----- : %s\n", path)
 
 	// TODO : DOCKER LOGIN TO PRIVATE DOCKER HUB
 	// err = ds.PullImage("docker", "1.12.0")
@@ -83,16 +87,21 @@ func (ds *Service) DeployCompose(payload DeployerPayload) error {
 	// 	log.Fatal(err)
 	// }
 	// docker run -w '/tmp/projects/230945890/Test App' -v '/tmp/projects:/tmp/projects' -v '/var/run/docker.sock:/var/run/docker.sock' docker/compose:1.8.0 up -d
+
+	wd, _ := os.Getwd()
+	dockerVol := fmt.Sprintf("%s/projects:/tmp/projects", wd)
+	dockerWorking := fmt.Sprintf("/tmp/projects/%s/%s", payload.ID, payload.Project)
 	return ds.RunContainer(
 		docker.Config{
 			Image:      "docker/compose:1.8.0",
 			Cmd:        []string{"up", "-d"},
 			Env:        payload.CreateEnvs(),
-			WorkingDir: path,
+			WorkingDir: dockerWorking,
 		},
 		docker.HostConfig{
 			Binds: []string{
-				"/tmp/projects:/tmp/projects",
+				// "$(PWD)/projects:/tmp/projects",
+				dockerVol,
 				"/var/run/docker.sock:/var/run/docker.sock",
 			},
 		},
@@ -163,7 +172,7 @@ type Registry struct {
 // ComposePath ...
 func (payload *DeployerPayload) ComposePath() (string, error) {
 	// if id or project empty return error
-	path := fmt.Sprintf("/tmp/projects/%s/%s", payload.ID, payload.Project)
+	path := fmt.Sprintf("./projects/%s/%s", payload.ID, payload.Project)
 	return path, nil
 }
 
