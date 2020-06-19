@@ -24,6 +24,7 @@ func (h *Handler) handleNewDeployment(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		h.logError("payload to deploy: %+v\nError: %s", req, err)
 		h.renderError(w, http.StatusInternalServerError, "ServerError", "Server error")
+		return
 	}
 
 	response := struct {
