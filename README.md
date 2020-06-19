@@ -38,6 +38,27 @@ Start server
 amadeus start
 ```
 
+Deployment example
+
+```sh
+curl --request POST \
+  --url http://0.0.0.0:8080/api/v1/deploy \
+  --header 'content-type: application/json' \
+  --header 'token: TOKEN' \
+  --data '{
+  "project": "PROJECT",
+  "compose_file": "BASE64 COMPOSE",
+  "registry": {
+    "url": "URL",
+    "login": "USER",
+    "password": "PASSWORD"
+  },
+  "extra": {
+    "TAG": "0.0.0"
+  }
+}'
+```
+
 ## Development
 
 ### Requirements
