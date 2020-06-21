@@ -29,7 +29,7 @@ WORKDIR /app
 COPY --from=build-env /go/src/github.com/jhsc/amadeus/amadeus .
 EXPOSE 8080
 
-ENTRYPOINT [ "./amadeus" ]
+CMD [ "./amadeus" ]
 
 ##############################################
 #VERSION 2
