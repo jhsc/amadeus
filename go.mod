@@ -7,5 +7,5 @@ require (
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/hashicorp/hcl v1.0.0
 	github.com/kelseyhightower/envconfig v1.4.0
-	github.com/mattn/go-sqlite3 v2.0.3+incompatible
+	github.com/mattn/go-sqlite3 v1.14.0
 )

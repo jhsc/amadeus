@@ -7,7 +7,9 @@ import (
 	"fmt"
 
 	// "github.com/go-sql-driver/mysql"
-	"github.com/mattn/go-sqlite3"
+
+	_ "github.com/mattn/go-sqlite3"
+
 	"gitlab.com/jhsc/amadeus/store"
 )
 
@@ -31,7 +33,7 @@ func Connect() (*Store, error) {
 	// )
 
 	// db, err := sql.Open("mysql", connstr)
-	sqlite3.Version()
+	// sqlite3.Version()
 	db, err := sql.Open("sqlite3", "./store.db")
 
 	if err != nil {
