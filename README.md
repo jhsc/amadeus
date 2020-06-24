@@ -66,6 +66,12 @@ curl --request POST \
 - Install [Go](https://golang.org)
 - Go Modules [Go Modules](https://blog.golang.org/using-go-modules)
 
+### Docker
+Build image
+```sh
+docker build -t amadeus:0.0.0 .
+```
+
 ### Makefile
 
 ```sh
