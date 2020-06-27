@@ -63,34 +63,30 @@ func (ds *Service) DeployCompose(payload DeployerPayload) error {
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
+	wd, _ := os.Getwd()
+	dockerVol := fmt.Sprintf("%s/projects:/tmp/projects", wd)
+	dockerWorking := fmt.Sprintf("/tmp/projects/%s/%s", payload.ID, payload.Project)
 
-	// err = ds.RunContainer(
-	// 	docker.Config{
-	// 		Image: "docker/compose:1.8.0",
-	// 		Cmd:   []string{"pull"},
-	// 		// Volumes: map[string]struct{}{
-	// 		// 	// "/tmp/projects:/tmp/projects": {},
-	// 		// },
-	// 		Env:        data.CreateEnvs(),
-	// 		WorkingDir: path,
-	// 	},
-	// 	docker.HostConfig{
-	// 		Binds: []string{
-	// 			"/tmp/projects:/tmp/projects",
-	// 			"/var/run/docker.sock:/var/run/docker.sock",
-	// 			// usr.HomeDir + "/.docker:/root/.docker",
-	// 		},
-	// 	},
-	// )
+	err = ds.RunContainer(
+		docker.Config{
+			Image:      "docker/compose:1.8.0",
+			Cmd:        []string{"pull"},
+			Env:        payload.CreateEnvs(),
+			WorkingDir: dockerWorking,
+		},
+		docker.HostConfig{
+			Binds: []string{
+				dockerVol,
+				"/var/run/docker.sock:/var/run/docker.sock",
+			},
+		},
+	)
 
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
 	// docker run -w '/tmp/projects/230945890/Test App' -v '/tmp/projects:/tmp/projects' -v '/var/run/docker.sock:/var/run/docker.sock' docker/compose:1.8.0 up -d
 
-	wd, _ := os.Getwd()
-	dockerVol := fmt.Sprintf("%s/projects:/tmp/projects", wd)
-	dockerWorking := fmt.Sprintf("/tmp/projects/%s/%s", payload.ID, payload.Project)
 	return ds.RunContainer(
 		docker.Config{
 			Image:      "docker/compose:1.8.0",
