@@ -82,6 +82,10 @@ func (ds *Service) DeployCompose(payload DeployerPayload) error {
 		},
 	)
 
+	if err != nil {
+		return err
+	}
+
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
