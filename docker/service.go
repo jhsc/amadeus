@@ -12,6 +12,10 @@ import (
 	"gitlab.com/jhsc/amadeus/store"
 )
 
+const (
+	dockerComposeImgVersion string = "1.8.0"
+)
+
 // Service ...
 type Service struct {
 	Client *docker.Client
@@ -53,7 +57,7 @@ func (ds *Service) DeployCompose(payload DeployerPayload) error {
 	// 	log.Fatal(err)
 	// }
 
-	err = ds.PullImage("docker/compose", "1.8.0")
+	err = ds.PullImage("docker/compose", dockerComposeImgVersion)
 	if err != nil {
 		return err
 	}
@@ -69,7 +73,7 @@ func (ds *Service) DeployCompose(payload DeployerPayload) error {
 
 	err = ds.RunContainer(
 		docker.Config{
-			Image:      "docker/compose:1.8.0",
+			Image:      "docker/compose:" + dockerComposeImgVersion,
 			Cmd:        []string{"pull"},
 			Env:        payload.CreateEnvs(),
 			WorkingDir: dockerWorking,
