@@ -53,7 +53,28 @@ func (ds *Service) DeployCompose(payload DeployerPayload) error {
 	fmt.Printf("Path ----- : %s\n", path)
 
 	// TODO : DOCKER LOGIN TO PRIVATE DOCKER HUB
-	err = ds.PullImage("docker", "1.12.0")
+	err = ds.PullImage("docker", dockerImgVersion)
+	if err != nil {
+		return err
+	}
+
+	err = ds.RunContainer(
+		docker.Config{
+			Image: "docker:" + dockerImgVersion,
+			Cmd: []string{
+				"login",
+				"-u", payload.Registry.Login,
+				"-p", payload.Registry.Password,
+				payload.Registry.URL,
+			},
+		},
+		docker.HostConfig{
+			Binds: []string{
+				"/var/run/docker.sock:/var/run/docker.sock",
+			},
+		},
+	)
+
 	if err != nil {
 		return err
 	}
