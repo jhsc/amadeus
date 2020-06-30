@@ -54,8 +54,6 @@ services:
       - front
 
 networks:
-  monitor-net:
-    driver: bridge
   front:
     external:
       name: traffic_front
