@@ -89,6 +89,7 @@ func (ds *Service) DeployCompose(payload DeployerPayload) error {
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
+	// TODO: Refactor project paths
 	wd, _ := os.Getwd()
 	dockerVol := fmt.Sprintf("%s/projects:/tmp/projects", wd)
 	dockerWorking := fmt.Sprintf("/tmp/projects/%s/%s", payload.ID, payload.Project)
