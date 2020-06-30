@@ -26,10 +26,10 @@ RUN CGO_ENABLED=0 GOOS=linux go build  -a -installsuffix cgo -o amadeus ./cmd/ma
 
 FROM alpine:3.7
 WORKDIR /app
-COPY --from=build-env /go/src/github.com/jhsc/amadeus/amadeus .
+COPY --from=build-env /go/src/github.com/jhsc/amadeus/amadeus /usr/local/bin/
 EXPOSE 8080
 
-CMD [ "./amadeus" ]
+CMD [ "amadeus" ]
 
 ##############################################
 #VERSION 2
