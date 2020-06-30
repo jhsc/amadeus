@@ -1,0 +1,64 @@
+version: '2'
+
+services:
+  amadeus:
+    build: ./
+    image: amadeus
+    container_name: amadeus
+    command: "start"
+    volumes:
+      - "./config:/app/config"
+      - "/tmp/projects:/tmp/projects"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    restart: always
+    networks:
+      - back
+      - front
+    environment:
+      VIRTUAL_HOST: amadeus.localhost.com
+      VIRTUAL_PORT: 443
+      LETSENCRYPT_HOST: amadeus.localhost.com
+      LETSENCRYPT_EMAIL: admin@localhost.com
+
+  nginx-server:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./certs:/etc/nginx/certs
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - back
+      - front
+
+  lets-encrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: lets-encrypt
+    restart: always
+    depends_on:
+      - nginx-server
+    volumes:
+      - ./certs:/etc/nginx/certs:rw
+    volumes_from:
+      - nginx-server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - back
+      - front
+
+networks:
+  monitor-net:
+    driver: bridge
+  front:
+    external:
+      name: traffic_front
+  back:
+    external:
+      name: traffic_back
