@@ -14,6 +14,7 @@ import (
 
 const (
 	dockerComposeImgVersion string = "1.8.0"
+	dockerImgVersion        string = "1.12.0"
 )
 
 // Service ...
@@ -52,10 +53,10 @@ func (ds *Service) DeployCompose(payload DeployerPayload) error {
 	fmt.Printf("Path ----- : %s\n", path)
 
 	// TODO : DOCKER LOGIN TO PRIVATE DOCKER HUB
-	// err = ds.PullImage("docker", "1.12.0")
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	err = ds.PullImage("docker", "1.12.0")
+	if err != nil {
+		return err
+	}
 
 	err = ds.PullImage("docker/compose", dockerComposeImgVersion)
 	if err != nil {
