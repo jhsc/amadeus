@@ -94,6 +94,9 @@ func (ds *Service) DeployCompose(payload DeployerPayload) error {
 	dockerVol := fmt.Sprintf("%s/projects:/tmp/projects", wd)
 	dockerWorking := fmt.Sprintf("/tmp/projects/%s/%s", payload.ID, payload.Project)
 
+	log.Printf("dockerVol: %s\n", dockerVol)
+	log.Printf("dockerWorking: %s\n", dockerWorking)
+
 	err = ds.RunContainer(
 		docker.Config{
 			Image:      "docker/compose:" + dockerComposeImgVersion,
@@ -113,9 +116,6 @@ func (ds *Service) DeployCompose(payload DeployerPayload) error {
 		return err
 	}
 
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
 	// docker run -w '/tmp/projects/230945890/Test App' -v '/tmp/projects:/tmp/projects' -v '/var/run/docker.sock:/var/run/docker.sock' docker/compose:1.8.0 up -d
 
 	return ds.RunContainer(
