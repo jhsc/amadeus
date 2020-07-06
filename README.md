@@ -74,6 +74,9 @@ docker build -t amadeus:0.0.0 .
 Run container
 ```sh
 docker run --rm -it -v $PWD:/app -p 8080:8080 amadeus:0.0.0 help
+
+# Generate Key
+docker run -it --rm -v $PWD:/app -p 8080:8080 jhsc/amadeus:0.0.1 amadeus gen-key
 ```
 
 ### Makefile
