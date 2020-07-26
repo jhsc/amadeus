@@ -59,7 +59,7 @@ func startServer() {
 	}
 
 	endpoint := "unix:///var/run/docker.sock"
-	ds, err := docker.NewService(endpoint, store)
+	ds, err := docker.NewService(endpoint, store, cfg.ProjectPath)
 	if err != nil {
 		logger.Fatalf("failed to create new docker service: %s", err)
 	}

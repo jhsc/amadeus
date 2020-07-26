@@ -19,20 +19,22 @@ const (
 
 // Service ...
 type Service struct {
-	Client *docker.Client
-	Store  store.Store
+	Client      *docker.Client
+	Store       store.Store
+	ProjectPath string
 }
 
 // NewService ...
-func NewService(endpoint string, store store.Store) (*Service, error) {
+func NewService(endpoint string, store store.Store, projectPath string) (*Service, error) {
 	client, err := docker.NewClient(endpoint)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Service{
-		Client: client,
-		Store:  store,
+		Client:      client,
+		Store:       store,
+		ProjectPath: projectPath,
 	}, nil
 }
 
