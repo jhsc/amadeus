@@ -12,6 +12,7 @@
 # ENTRYPOINT [ "./goapp" ]
 
 FROM golang:1.14-alpine  AS build-env
+RUN apk update && apk --no-cache add git build-base
 ENV GO111MODULE=on
 WORKDIR /go/src/github.com/jhsc/amadeus
 
@@ -22,14 +23,15 @@ RUN go mod download
 COPY . .
 EXPOSE 8080
 # Build binary
-RUN CGO_ENABLED=0 GOOS=linux go build  -a -installsuffix cgo -o amadeus ./cmd/main.go
+# RUN CGO_ENABLED=0 GOOS=linux go build  -a -installsuffix cgo -o amadeus ./cmd/main.go
+RUN go build -o amadeus cmd/main.go
 
 FROM alpine:3.7
 WORKDIR /app
-COPY --from=build-env /go/src/github.com/jhsc/amadeus/amadeus .
+COPY --from=build-env /go/src/github.com/jhsc/amadeus/amadeus /usr/local/bin/
 EXPOSE 8080
 
-CMD [ "./amadeus" ]
+CMD [ "amadeus" ]
 
 ##############################################
 #VERSION 2

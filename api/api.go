@@ -35,6 +35,7 @@ func New(config *Config, token string) *Handler {
 	h.router = chi.NewRouter()
 	h.router.Use(h.restrictAccess)
 	h.router.Post("/deploy", h.handleNewDeployment)
+	h.router.Post("/restart", h.handleRestartContainer)
 
 	return h
 }
