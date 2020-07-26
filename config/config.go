@@ -19,10 +19,11 @@ const ConfigFile = "amadeus.conf"
 
 // Config is an amadeus configuration struct.
 type Config struct {
-	Address string `hcl:"address" envconfig:"AMADEUS_ADDRESS"`
-	BaseURL string `hcl:"base_url" envconfig:"AMADEUS_BASE_URL"`
-	Title   string `hcl:"title" envconfig:"AMADEUS_TITLE"`
-	Token   string `hcl:"token" envconfig:"AMADEUS_TOKEN"`
+	Address     string `hcl:"address" envconfig:"AMADEUS_ADDRESS"`
+	BaseURL     string `hcl:"base_url" envconfig:"AMADEUS_BASE_URL"`
+	Title       string `hcl:"title" envconfig:"AMADEUS_TITLE"`
+	Token       string `hcl:"token" envconfig:"AMADEUS_TOKEN"`
+	ProjectPath string `hcl:"project_path" envconfig:"PROJECT_PATH"`
 }
 
 // GetConfig loads configuration from environment variables or from file.
