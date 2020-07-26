@@ -70,6 +70,7 @@ func startServer() {
 		Store:         store,
 	},
 		cfg.Token,
+		cfg.ProjectPath,
 	)
 
 	router := chi.NewRouter()

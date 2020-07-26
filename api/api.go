@@ -24,13 +24,18 @@ type Config struct {
 // Handler handles API requests.
 type Handler struct {
 	*Config
-	router chi.Router
-	Token  string
+	router      chi.Router
+	Token       string
+	ProjectPath string
 }
 
 // New creates a new handler based on the given config.
-func New(config *Config, token string) *Handler {
-	h := &Handler{Config: config, Token: token}
+func New(config *Config, token, projectPath string) *Handler {
+	h := &Handler{
+		Config:      config,
+		Token:       token,
+		ProjectPath: projectPath,
+	}
 
 	h.router = chi.NewRouter()
 	h.router.Use(h.restrictAccess)
