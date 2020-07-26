@@ -97,8 +97,9 @@ func GenKeyHex(byteLen int) string {
 }
 
 var tpl = template.Must(template.New("initial-config").Parse(strings.TrimSpace(`
-address 	= "0.0.0.0:8080"
-base_url 	= "https://amadeus.com"
-title    	= "amadeus"
-token 	 	= "{{.token_secret}}"
+address 			= "0.0.0.0:8080"
+base_url 			= "https://amadeus.com"
+title    			= "amadeus"
+token 	 			= "{{.token_secret}}"
+project_path 	= "/user/home/app"
 `)))
