@@ -92,8 +92,8 @@ func (ds *Service) DeployCompose(payload DeployerPayload) error {
 	// 	log.Fatal(err)
 	// }
 	// TODO: Refactor project paths
-	wd, _ := os.Getwd()
-	dockerVol := fmt.Sprintf("%s/projects:/tmp/projects", wd)
+	// wd, _ := os.Getwd()
+	dockerVol := fmt.Sprintf("%s/projects:/tmp/projects", ds.ProjectPath)
 	dockerWorking := fmt.Sprintf("/tmp/projects/%s/%s", payload.ID, payload.Project)
 
 	log.Printf("dockerVol: %s\n", dockerVol)
